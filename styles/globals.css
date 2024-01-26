@@ -8,7 +8,7 @@
     }
 
     header {
-        @apply absolute w-screen flex justify-between items-center bg-[#fafafa] px-8 py-3 border-b border-[#dddddd] z-20;
+        @apply fixed w-screen flex justify-between items-center bg-[#fafafa] px-8 py-3 border-b border-[#dddddd] z-20;
     }
 
     .main {
@@ -16,7 +16,7 @@
     }
 
     .sideMenu {
-        @apply bg-[#fafafa] h-full absolute w-64 p-4 border-r border-[#dddddd] px-8 pt-24; 
+        @apply fixed bg-[#fafafa] h-full w-64 p-4 border-r border-[#dddddd] px-8 pt-24; 
     }
 
     .sideMenu-item {

@@ -15,7 +15,7 @@ export default async function handler(req, res) {
             profile_url: user.photoURL,
             credit: 5,
             premium: false, 
-            problems: []
+            solutions: []
         })
     }
     res.status(201).json({ succes: true })

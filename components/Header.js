@@ -5,9 +5,12 @@ import { PiCrownSimpleFill } from "react-icons/pi"
 export default function Header({ user }) {
   return (
     <header>
-      <Link href="/">
-        <p className="text-[#171717] font-semibold text-lg">Mileto</p>
-      </Link>
+      <div className="flex items-center gap-3">
+        <Link href="/">
+          <p className="text-[#171717] font-semibold text-lg">Mileto</p>
+        </Link>
+        <p>🇬🇧 🇪🇸</p>
+      </div>
       <div className="flex items-center gap-6 font-medium">
         <PiCrownSimpleFill size={23} className="text-yellow-400 cursor-pointer" />
         <div className="bg-[#f4f4f4] border border-[#dddddd] px-4 py-1 rounded-md text-sm">5 solutions left</div>
