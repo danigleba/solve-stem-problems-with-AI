@@ -2,3 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+    button {
+        @apply bg-[#2e2e2e] hover:bg-[#242424] text-[#f4f4f4] font-medium text-lg rounded-xl w-full py-4 transition duration-200 ease-in-out;
+    }
+
+    header {
+        @apply absolute w-screen flex justify-between items-center bg-[#fafafa] px-8 py-3 border-b border-[#dddddd] z-20;
+    }
+
+    .main {
+        @apply bg-[#fafafa] min-h-screen flex flex-col items-center justify-center px-8;
+    }
+
+    .sideMenu {
+        @apply bg-[#fafafa] h-full absolute w-64 p-4 border-r border-[#dddddd] px-8 pt-24; 
+    }
+
+    .sideMenu-item {
+        @apply block py-2 hover:bg-gray-700;
+    }
+}
