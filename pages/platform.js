@@ -16,11 +16,29 @@ export default function Platform() {
     const auth = getAuth(App)
     const fileInputRef = useRef()
     const [user, setUser] = useState()
+    const [userData, setUserData] = useState()
     const [loading, setLoading] = useState(false)
     const [textProblem, setTextProblem] = useState("")
     const [imagesProblem, setImagesProblem] = useState([])
     const [solution, setSolution] = useState("")
 
+    const getUserData = async () => {
+        try {
+            const response = await fetch(`/api/firebase/getUser?id=${user.uid}`, {
+              method: "POST", 
+              headers: {
+                "Content-Type": "application/json",
+              },
+            })
+            const data = await response.json()
+            setUserData(data.data)
+        } 
+        catch (error) {
+            console.error("Error fetching problem solution:", error.message)
+        } 
+    }
+
+    //Handle uploading images
     const handleFileChange = (e) => {
         const file = e.target.files[0]
         if (file) {
@@ -32,7 +50,6 @@ export default function Platform() {
             reader.readAsDataURL(file)
         }
     }
-
     const handleClick = () => {
         fileInputRef.current.click()
     }
@@ -47,7 +64,6 @@ export default function Platform() {
               body: JSON.stringify({text: textProblem, images: imagesProblem}), 
             })
             const data = await response.json()
-            console.log(data)
             return data.data.message.content
         } 
         catch (error) {
@@ -62,7 +78,7 @@ export default function Platform() {
               headers: {
                 "Content-Type": "application/json",
               },
-              body: JSON.stringify({user: user, solution: solution, imagesProblem: imagesProblem, textProblem: textProblem}), 
+              body: JSON.stringify({user: user, userData: userData, solution: solution, imagesProblem: imagesProblem, textProblem: textProblem}), 
             })
         } 
         catch (error) {
@@ -70,14 +86,29 @@ export default function Platform() {
         } 
     }
 
-    const handleSubmit = async () => {
-        //Returning if the user has provided no text and no images
-        if (textProblem == "" && imagesProblem == []) return
+    const submitProblem = async () => {
+        console.log(userData.premium)
+        console.log(userData.credit)
+        console.log(textProblem)
+        console.log(imagesProblem)
+        
+        if (userData.premium == false && userData.credit < 1) {
+            //Open premium modal
+            console.log("No credit left.")
+            return
+        } else if (textProblem == "" && imagesProblem == []) {
+            console.log("No text or image in submition.")
+            return
+        } else handleSubmit()
+    }
 
+    const handleSubmit = async () => {
         setLoading(true)
         //const solution = await solveProblem()
-        storeSolution("This is a solution")
+        const solutionId = await storeSolution("solution")
+        router.push(`/solutions/${solutionId}`)
     }
+
 
     useEffect(() => {
         onAuthStateChanged(auth, (user) => {
@@ -89,6 +120,10 @@ export default function Platform() {
             }
         })
     }, [])
+
+    useEffect(() => {
+        if (user) getUserData()
+    }, [user])
     return (
         <>
             <Head>
@@ -113,8 +148,8 @@ export default function Platform() {
                 <title>Mileto | Snap your STEM problem & get a detailed solution.</title>
             </Head>
             <main className={`${inter.className}`}>
-                <Header user={user} />
-                <SideMenu user={user}/>
+                <Header user={user} userData={userData}/>
+                <SideMenu userData={userData}/>
                 <div className="main pl-64 py-20">
                     {loading && (
                         <div className="font-semibold text-[#171717] flex gap-4">
@@ -135,7 +170,7 @@ export default function Platform() {
                             </div>
                             <div className="flex flex-row flex-wrap gap-6">
                                 {imagesProblem.map((item, index) => (
-                                    <a key={index} className="w-1/6">
+                                    <div key={index} className="w-1/6">
                                         <div className="relative pb-[100%]">
                                             <Image
                                                 layout="fill"
@@ -144,10 +179,13 @@ export default function Platform() {
                                                 src={item}
                                                 className="rounded-xl"/>
                                         </div>
-                                    </a>
+                                    </div>
                                 ))}
                             </div>
-                            <button onClick={handleSubmit}>Solve problem</button>
+                            <div>
+                                <button onClick={submitProblem}>Solve problem</button>
+                                <p className="text-xs text-center pt-2">Mileto can make mistakes. Consider reviewing important information.</p>
+                            </div>
                         </div>
                     )}
                 </div>

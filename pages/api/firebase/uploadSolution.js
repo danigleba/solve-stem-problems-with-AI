@@ -1,21 +1,23 @@
 import { db } from "@/utils/firebase"
-import { doc, getDoc, setDoc } from "firebase/firestore"
+import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore"
 import { v4 as uuidv4 } from "uuid"
 
 export default async function handler(req, res) {
-    const { user, solution, imagesProblem, textProblem } = req.body
+    const { user, userData, solution, imagesProblem, textProblem } = req.body
+    const id = uuidv4()
     const userRef = doc(db, "users", user.uid)
     const userSnap = await getDoc(userRef)
-    const userData = userSnap.data()
     const solutions = userData?.solutions
+    const userCredit = userData?.credit
 
-    solutions?.push({ id: uuidv4(), solution: solution, text: textProblem, images: imagesProblem })
+    solutions?.push({ id: id, solution: solution, text: textProblem, images: imagesProblem, title: "Your problem" })
 
     try {
-        await setDoc(doc(db, "users", user.uid), {
+        await updateDoc(doc(db, "users", user.uid), {
             "solutions": solutions,
+            "credit": userCredit > 0 ? userCredit - 1 : 0
         })
-        res.status(201).json({ solutionId: true })
+        res.status(201).json({ solutionId: id })
     } catch (error) {
         res.status(500).json({ error: "Internal Server Error" })
     }
