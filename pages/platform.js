@@ -7,6 +7,7 @@ import App from "@/utils/firebase"
 import { useRouter } from "next/router"
 import Header from "@/components/Header"
 import SideMenu from "@/components/SideMenu"
+import PricingModal from "@/components/PricingModal"
 import LoadingAnimation from "@/components/LoadingAnimation"
 
 const inter = Inter({ subsets: ["latin"] })
@@ -18,9 +19,10 @@ export default function Platform() {
     const [user, setUser] = useState()
     const [userData, setUserData] = useState()
     const [loading, setLoading] = useState(false)
+    const [errorMessage, setErrorMessage] = useState("")
     const [textProblem, setTextProblem] = useState("")
     const [imagesProblem, setImagesProblem] = useState([])
-    const [solution, setSolution] = useState("")
+    const [isModalOpen, setIsModalOpen] = useState(false)
 
     const getUserData = async () => {
         try {
@@ -80,6 +82,8 @@ export default function Platform() {
               },
               body: JSON.stringify({user: user, userData: userData, solution: solution, imagesProblem: imagesProblem, textProblem: textProblem}), 
             })
+            const data = await response.json()
+            return data.solutionId
         } 
         catch (error) {
             console.error("Error fetching comments:", error.message)
@@ -87,25 +91,22 @@ export default function Platform() {
     }
 
     const submitProblem = async () => {
-        console.log(userData.premium)
-        console.log(userData.credit)
-        console.log(textProblem)
-        console.log(imagesProblem)
-        
         if (userData.premium == false && userData.credit < 1) {
-            //Open premium modal
-            console.log("No credit left.")
+            setIsModalOpen(true)
             return
-        } else if (textProblem == "" && imagesProblem == []) {
-            console.log("No text or image in submition.")
+        } 
+        if (textProblem == "" && imagesProblem.length == 0) {
+            setErrorMessage("Upload an image or write down a problem to solve.")
             return
-        } else handleSubmit()
+        }
+        setErrorMessage("") 
+        handleSubmit()
     }
 
     const handleSubmit = async () => {
         setLoading(true)
-        //const solution = await solveProblem()
-        const solutionId = await storeSolution("solution")
+        const solution = await solveProblem()
+        const solutionId = await storeSolution(solution)
         router.push(`/solutions/${solutionId}`)
     }
 
@@ -124,6 +125,10 @@ export default function Platform() {
     useEffect(() => {
         if (user) getUserData()
     }, [user])
+
+    useEffect(() => {
+        setErrorMessage("")
+    }, [textProblem, imagesProblem])
     return (
         <>
             <Head>
@@ -150,7 +155,7 @@ export default function Platform() {
             <main className={`${inter.className}`}>
                 <Header user={user} userData={userData}/>
                 <SideMenu userData={userData}/>
-                <div className="main pl-64 py-20">
+                <div className="main pl-64 pt-20">
                     {loading && (
                         <div className="font-semibold text-[#171717] flex gap-4">
                             <p>🧠 Thinking...</p>
@@ -183,12 +188,20 @@ export default function Platform() {
                                 ))}
                             </div>
                             <div>
+                                <p className="mb-2 text-center text-red-500">{errorMessage}</p>
                                 <button onClick={submitProblem}>Solve problem</button>
                                 <p className="text-xs text-center pt-2">Mileto can make mistakes. Consider reviewing important information.</p>
                             </div>
                         </div>
                     )}
-                </div>
+                    {/*Pricing modal*/}
+                    <div className={`${isModalOpen == true ? "" : "hidden"} w-screen h-screen flex items-center justify-center absolute`}>
+                        <div onClick={() => setIsModalOpen(false)} className="flex items-center justify-center bg-[#171717] w-full h-full opacity-30 fixed"></div>
+                        <div className="z-20 flex items-center justify-center text-[#171717] w-max h-max absolute">
+                            <PricingModal />
+                        </div>
+                    </div>
+                </div>  
             </main>
         </>
     )

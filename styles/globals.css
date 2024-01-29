@@ -11,8 +11,12 @@
         @apply bg-[#2e2e2e] hover:bg-[#242424] text-[#f4f4f4] font-medium text-lg rounded-xl w-full py-4 transition duration-200 ease-in-out;
     }
 
+    .new-problem-btn {
+        @apply flex items-center justify-center gap-2 text-sm rounded-md mt-6 px-4 bg-[#f4f4f4] border border-[#dddddd] text-[#171717] hover:bg-[#dddddd];
+    }
+
     header {
-        @apply fixed w-screen flex justify-between items-center bg-[#fafafa] px-8 py-3 border-b border-[#dddddd] z-20;
+        @apply fixed w-screen flex justify-between items-center bg-[#fafafa] z-20 px-8 py-3 border-b border-[#dddddd] z-20;
     }
 
     .main {
@@ -20,7 +24,7 @@
     }
 
     .sideMenu {
-        @apply fixed bg-[#fafafa] h-full w-64 p-4 border-r border-[#dddddd] pl-8 pr-6 pt-24; 
+        @apply fixed bg-[#fafafa] h-full w-64 p-4 border-r border-[#dddddd] z-10 pl-8 pr-6 pt-24; 
     }
 
     .sideMenu-item {
