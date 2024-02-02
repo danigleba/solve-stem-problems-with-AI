@@ -16,11 +16,11 @@
     }
 
     header {
-        @apply fixed w-screen flex justify-between items-center bg-[#fafafa] z-20 px-8 py-3 border-b border-[#dddddd] z-20;
+        @apply fixed w-screen flex justify-between items-center bg-[#fafafa] z-20 px-8 py-3 border-b border-[#dddddd];
     }
 
     .main {
-        @apply bg-[#fafafa] min-h-screen flex flex-col items-center justify-center px-8;
+        @apply bg-[#fafafa] min-h-screen flex flex-col items-center justify-center;
     }
 
     .sideMenu {
@@ -31,3 +31,4 @@
         @apply block py-2 hover:bg-gray-700;
     }
 }
+

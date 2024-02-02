@@ -4,9 +4,9 @@ import { useEffect, useState } from "react"
 import Image from "next/image"
 import { getAuth, onAuthStateChanged} from "firebase/auth"
 import App from "@/utils/firebase"
-import Markdown from "react-markdown"
 import Header from "@/components/Header"
 import SideMenu from "@/components/SideMenu"
+import MarkdownRenderer from "@/components/MarkdownMathText"
 
 import { Inter } from "next/font/google"
 
@@ -86,24 +86,24 @@ export default function Platform() {
             <main className={`${inter.className}`}>
                 <Header user={user} userData={userData}/>
                 <SideMenu userData={userData} solutionId={solutionId}/>
-                <div className="main justify-start pl-64 py-20">
+                <div className="main justify-start md:pl-64 py-12 md:py-20">
                     <div className="w-full p-10">
                         <h2>Problem</h2>
                         <p>{solution?.text}</p>
                         {solution?.images.map((item, index) => (
                             <div key={index}>
-                                <div className="relative w-1/6 aspect-square mt-2">
+                                <div className="relative w-1/2 md:w-1/3 lg:w-1/6 aspect-square mt-2">
                                     <Image
                                         layout="fill"
                                         objectFit="cover"
                                         alt="Uploaded image"
                                         src={item}
-                                        className="rounded-xl w-full h-full"/>
+                                        className="rounded-xl"/>
                                 </div>
                             </div>
                         ))}
                         <h2 className="pt-12">Solution</h2>
-                        <Markdown>{solution?.solution}</Markdown>
+                        <MarkdownRenderer source={solution?.solution}></MarkdownRenderer>
                     </div>
                 </div>
             </main>

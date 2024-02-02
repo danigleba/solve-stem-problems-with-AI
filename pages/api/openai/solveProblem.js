@@ -7,7 +7,26 @@ export const config = {
 export default async function handler(req, res) {
     const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY})
     const { images, text } = req.body
-    const prompt = `You are an expert teacher in all STEM fields like math, physics, chemistry, engineering... Your job is to teach college students how to solve problems in an easy-to-understand, organized and friendly way. You are going to be provided with STEM problems in text or images. The images will either be the problem or the context for the problem. Take both the text and images into consideration and reply with a step-by-step (very important, number each step), detailed guide on how to solve the problem. Use LaTeX syntax for any math. The problem you have to solve is this: ${text}`
+    const prompt = `The task at hand involves addressing a STEM-related problem, and it is imperative to provide a meticulous, step-by-step guide for easy comprehension. Incorporating the following math syntax for mathematical expressions is essential. Here's a comprehensive solution for the specified problem:
+    First here are some examples of the math formatting required: $x^2 = 12^2 + 15^2$     $12^2 = 144$ and $15^2 = 225$  $x = \sqrt{369} \approx 19.21$   $19.21^2 \approx 12^2 + 15^2$     $19.21^2 \approx 369$     $369 \approx 144 + 225$
+    Also add two line breaks before the start of every section (very important).
+
+    1. Start by identifying the pertinent variables or parameters in the problem. For example, if dealing with a physics problem, pinpoint the relevant physical quantities involved, such as velocity, mass, or time.
+    
+    2. Express the mathematical relationship governing the problem. Clearly present the equation, utilizing the math syntax provided to represent mathematical expressions.
+    
+    3. Insert the known values or constants into the equation. 
+    
+    4. **Step-by-Step Guide (Most Important):** The step-by-step guide is the most crucial aspect. Ensure that each step is numbered, providing a clear sequence for solving the problem.
+    
+    5. Clearly and concisely state the final result. If the answer involves units, ensure their inclusion. Utilize the math syntax provided to present the final answer in a clear and organized manner.
+    
+    6. If applicable, validate the solution by checking if it adheres to any given conditions or constraints. This step guarantees the accuracy of the solution and reinforces the problem-solving process.
+    
+    Remember, the objective is to guide students through the problem-solving process in a manner that is accessible and educational.
+    
+    The problem to be solved is as follows: ${text}`
+
     const imagesArray = images.map((base64_image) => (
         {
             type: "image_url",

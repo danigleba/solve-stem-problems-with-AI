@@ -155,7 +155,7 @@ export default function Platform() {
             <main className={`${inter.className}`}>
                 <Header user={user} userData={userData}/>
                 <SideMenu userData={userData}/>
-                <div className="main pl-64 pt-20">
+                <div className="main px-8 md:px-0 md:pl-64 md:pt-20">
                     {loading && (
                         <div className="font-semibold text-[#171717] flex gap-4">
                             <p>🧠 Thinking...</p>
@@ -163,7 +163,7 @@ export default function Platform() {
                         </div>
                     )}
                     {!loading && (
-                        <div className="w-1/2 space-y-6">
+                        <div className="w-full md:w-1/2 space-y-6">
                             <div className="flex gap-6">
                                 <input ref={fileInputRef} className="hidden" type="file" onChange={handleFileChange} />
                                 <button onClick={handleClick} className="text-base border border-[#dddddd] bg-[#f4f4f4] hover:bg-[#dddddd] duration-200 ease-in-out text-[#171717]">
@@ -175,7 +175,7 @@ export default function Platform() {
                             </div>
                             <div className="flex flex-row flex-wrap gap-6">
                                 {imagesProblem.map((item, index) => (
-                                    <div key={index} className="w-1/6">
+                                    <div key={index} className="w-1/2 md:w-1/3 lg:w-1/6">
                                         <div className="relative pb-[100%]">
                                             <Image
                                                 layout="fill"
@@ -195,7 +195,7 @@ export default function Platform() {
                         </div>
                     )}
                     {/*Pricing modal*/}
-                    <div className={`${isModalOpen == true ? "" : "hidden"} w-screen h-screen flex items-center justify-center absolute`}>
+                    <div className={`${isModalOpen == true ? "" : "hidden"} w-screen flex items-center justify-center fixed`}>
                         <div onClick={() => setIsModalOpen(false)} className="flex items-center justify-center bg-[#171717] w-full h-full opacity-30 fixed"></div>
                         <div className="z-20 flex items-center justify-center text-[#171717] w-max h-max absolute">
                             <PricingModal />

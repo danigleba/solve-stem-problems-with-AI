@@ -1,29 +1,38 @@
 import { useRouter } from "next/router"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import PricingModal from "./PricingModal"
+import SideMenu from "@/components/SideMenu"
 import { PiCrownSimpleFill } from "react-icons/pi"
 import { FaPlus } from "react-icons/fa6"
+import { RxHamburgerMenu } from "react-icons/rx"
+import { IoClose } from "react-icons/io5"
 
 export default function Header({ user, userData }) {
   const router = useRouter()
+  const { solutionId } = router.query
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [isHamburgerOpen, setIsHamburgerOpen] = useState(false)
   return (
     <>
       <header>
         <div className="flex items-center gap-6">
-          <Link href="/platform">
+          <div onClick={() => setIsHamburgerOpen(!isHamburgerOpen)} className="md:hidden text-[#171717]">
+            <RxHamburgerMenu size={25} strokeWidth={0.5}/>
+          </div>
+          <Link href="/platform" className="hidden md:block">
             <p className="text-[#171717] font-semibold text-lg">Mileto</p>
           </Link>
-          <button onClick={() => router.push("/platform")} className="new-problem-btn my-0 py-2">New problem <FaPlus /></button>
+          <button onClick={() => router.push("/platform")} className="new-problem-btn my-0 py-2 hidden md:flex">New problem <FaPlus /></button>
+          <button onClick={() => router.push("/platform")} className="new-problem-btn my-0 py-2 md:hidden">New <FaPlus /></button>
         </div>
         <div className="flex items-center gap-6 font-medium">
           <div onClick={() => setIsModalOpen(true)} className="flex items-center gap-6 cursor-pointer">
             <PiCrownSimpleFill size={23} className="text-yellow-400 cursor-pointer"/>
-            <div className="bg-[#f4f4f4] border border-[#dddddd] px-4 py-1 rounded-md text-sm">{userData?.credit} solutions left</div>
+            <div className="bg-[#f4f4f4] border border-[#dddddd] px-4 py-1 rounded-md text-sm hidden md:block">{userData?.credit} solutions left</div>
           </div>
-          <p>{user?.displayName}</p>
+          <p className="hidden md:block">{user?.displayName}</p>
           <div className="w-10 aspect-square bg-[#dddddd] rounded-full overflow-hidden">
             <Image
               src={user?.photoURL}
@@ -35,10 +44,39 @@ export default function Header({ user, userData }) {
         </div>
       </header>
       {/*Pricing modal*/}
-      <div className={`${isModalOpen == true ? "" : "hidden"} w-screen h-screen flex items-center justify-center absolute`}>
-        <div onClick={() => setIsModalOpen(false)} className="z-10 flex items-center justify-center bg-[#171717] w-full h-full opacity-30 fixed"></div>
-        <div className="z-20 flex items-center justify-center text-[#171717] w-max h-max absolute ml-64 mt-20">
+      <div className={`${isModalOpen == true ? "" : "hidden"} w-screen h-screen flex items-center justify-center fixed`}>
+        <div onClick={() => setIsModalOpen(false)} className="z-20 flex items-center justify-center bg-[#171717] w-full h-full opacity-30 fixed"></div>
+        <div className="z-20 flex items-center justify-center text-[#171717] w-max h-max absolute md:ml-64 md:mt-20">
           <PricingModal />
+        </div>
+      </div>
+      {/*Hamburger menu*/}
+      <div className={`${isHamburgerOpen ? "" : "hidden"} fixed h-screen w-screen z-50`}>
+        <div className="h-full w-2/3 border-r border-[#dddddd] bg-[#fafafa] pt-5 pl-7 space-y-6">
+          <div onClick={() => setIsHamburgerOpen(!isHamburgerOpen)}>
+            <IoClose size={28} strokeWidth={0.5}/>
+          </div>
+          {/*Side menu*/}
+          <div className=" mr-7">
+                    <h2 className="text-base font-bold mb-6">Solved problems</h2>
+                    {userData?.solutions.length <= 0 && (
+                        <p className="font-light">You haven't solved any problems yet.</p>
+                    )}
+                    {userData?.solutions?.length > 0 && (
+                        <div>
+                            {userData?.solutions?.map((item, index) => (
+                                <div key={index}>
+                                    <Link href={`/solutions/${item?.id}`}>
+                                        <div className={`mb-3 px-4 py-2 border border-[#dddddd] rounded-md ${solutionId == item?.id ? "bg-[#2e2e2e] text-white cursor-default" : " bg-[#f4f4f4] hover:bg-[#dddddd] cursor-pointer duration-200 ease-in-out"}`}> 
+                                            <p className="truncate text-bold text-sm">{item.solution}</p>
+                                        </div>
+                                    </Link>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                    <button onClick={() => router.push("/platform")} className="new-problem-btn">New problem <FaPlus /></button>
+                </div>
         </div>
       </div>
     </>
