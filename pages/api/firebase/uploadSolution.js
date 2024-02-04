@@ -1,12 +1,10 @@
 import { db } from "@/utils/firebase"
-import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore"
+import { doc, updateDoc } from "firebase/firestore"
 import { v4 as uuidv4 } from "uuid"
 
 export default async function handler(req, res) {
     const { user, userData, solution, imagesProblem, textProblem } = req.body
     const id = uuidv4()
-    const userRef = doc(db, "users", user.uid)
-    const userSnap = await getDoc(userRef)
     const solutions = userData?.solutions
     const userCredit = userData?.credit
 

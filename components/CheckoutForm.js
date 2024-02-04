@@ -1,14 +1,15 @@
-import {useState, useEffect} from "react"
+import { useState } from "react"
 import { useRouter } from "next/router"
 import { PaymentElement, useStripe, useElements } from "@stripe/react-stripe-js"
-import LoadingAnimation from "./LoadingAnimation"
-const CheckoutForm = ({ clientSecret, user }) => {
+import LoadingAnimation from "@/components/LoadingAnimation"
+
+export default function CheckoutForm({ clientSecret, user }) {
     const router = useRouter()
+    const stripe = useStripe()
+    const elements = useElements()
     const paymentElementOptions = {
         layout: "tabs",
     }  
-    const stripe = useStripe()
-    const elements = useElements()
     const [isLoading, setIsLoading] = useState(false)
 
     const handleSubmit = async (e) => {
@@ -18,7 +19,7 @@ const CheckoutForm = ({ clientSecret, user }) => {
         const { error } = await stripe.confirmPayment({
             elements,
             confirmParams: {
-                return_url: "http://mileto.danigleba.com/succes",
+                return_url: "http://mileto.danigleba.com/platform",
             },
             redirect: "if_required"
         })
@@ -30,18 +31,18 @@ const CheckoutForm = ({ clientSecret, user }) => {
     }
 
     const handleSuccesfulPayment = async () => {
-      const response = await fetch(`/api/firebase/updatePremium?userId=${user?.uid}`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            }
+        const response = await fetch(`/api/firebase/updatePremium?userId=${user?.uid}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                }
         })
-      const data = await response.json()
-      if (data.premiumUpdated) router.push("/platform")
+        const data = await response.json()
+        if (data.premiumUpdated) router.push("/platform")
     }
-  return (
-    <form id="payment-form" onSubmit={handleSubmit}>
-        <PaymentElement id="payment-element" options={paymentElementOptions}/>
+    return (
+        <form id="payment-form" onSubmit={handleSubmit}>
+            <PaymentElement id="payment-element" options={paymentElementOptions}/>
             <button id="submit" disabled={isLoading || !stripe || !elements} className="w-full text-base mt-8 hover:scale-100">
                 <span id="button-text">
                     {isLoading ? 
@@ -53,8 +54,6 @@ const CheckoutForm = ({ clientSecret, user }) => {
                         `Checkout $4,97`}
                 </span>
             </button>
-    </form> 
-  )
+        </form> 
+    )
 }
-
-export default CheckoutForm;
