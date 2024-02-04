@@ -69,16 +69,16 @@ export default function Platform() {
                 {/* Open Graph Meta Tags */}
                 <meta property="og:title" content="Mileto | Snap your STEM problem & get a detailed solution." />
                 <meta property="og:description" content="Snap your STEM problem & get a detailed solution" />
-                <meta property="og:image" content="/icon.png" />
+                <meta property="og:image" content="/icon.jpg" />
                 <meta property="og:url" content="mileto.danigleba.com" />
                 <meta property="og:type" content="website" />
                 {/* Twitter Meta Tags */}
                 <meta name="twitter:card" content="summary_large_image" />
                 <meta name="twitter:title" content="Mileto | Snap your STEM problem & get a detailed solution." />
                 <meta name="twitter:description" content="Snap your STEM problem & get a detailed solution." />
-                <meta name="twitter:image" content="/icon.png" />
+                <meta name="twitter:image" content="/icon.jpg" />
                 {/* Favicon */}
-                <link rel="icon" href="/icon.png" />
+                <link rel="icon" href="/icon.jpg" />
                 {/* Page Title */}
                 <title>Mileto | Snap your STEM problem & get a detailed solution.</title>
             </Head>
