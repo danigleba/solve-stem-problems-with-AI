@@ -20,7 +20,6 @@ export default function Index() {
   const auth = getAuth(App)
   const [user, setUser] = useState()
   const [userData, setUserData] = useState()
-  const [isLoading, setIsLoading] = useState(false)
   const [clientSecret, setClientSecret] = useState("")
 
     const appearance = {
