@@ -1,13 +1,13 @@
 import Head from "next/head"
 import Image from "next/image"
 import { useEffect, useState, useRef } from "react"
-import { Inter } from "next/font/google"
-import { getAuth, onAuthStateChanged} from "firebase/auth";
+import { getAuth, onAuthStateChanged} from "firebase/auth"
 import App from "@/utils/firebase"
 import { useRouter } from "next/router"
 import Header from "@/components/Header"
 import SideMenu from "@/components/SideMenu"
 import LoadingAnimation from "@/components/LoadingAnimation"
+import { Inter } from "next/font/google"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -21,7 +21,6 @@ export default function Platform() {
     const [errorMessage, setErrorMessage] = useState("")
     const [textProblem, setTextProblem] = useState("")
     const [imagesProblem, setImagesProblem] = useState([])
-    const [isModalOpen, setIsModalOpen] = useState(false)
     
     const getUserData = async () => {
         try {
@@ -91,7 +90,7 @@ export default function Platform() {
 
     const submitProblem = async () => {
         if (userData.premium == false && userData.credit < 1) {
-            setIsModalOpen(true)
+            router.push("/go-premium")
             return
         } 
         if (textProblem == "" && imagesProblem.length == 0) {
@@ -123,8 +122,6 @@ export default function Platform() {
     useEffect(() => {
         if (user) getUserData()
     }, [user])
-
-    
 
     useEffect(() => {
         setErrorMessage("")

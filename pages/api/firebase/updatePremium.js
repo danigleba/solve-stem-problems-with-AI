@@ -7,8 +7,7 @@ export default async function handler(req, res) {
     try {
         await updateDoc(userRef, {
             premium: true
-        })
-          
+        })   
         res.status(200).json({ premiumUpdated: true })
     } catch (error) {
         res.status(500).json({ error: "Internal Server Error" })

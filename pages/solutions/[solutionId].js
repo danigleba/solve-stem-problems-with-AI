@@ -7,7 +7,6 @@ import App from "@/utils/firebase"
 import Header from "@/components/Header"
 import SideMenu from "@/components/SideMenu"
 import MarkdownRenderer from "@/components/MarkdownMathText"
-
 import { Inter } from "next/font/google"
 
 const inter = Inter({ subsets: ["latin"] })
@@ -23,10 +22,10 @@ export default function Platform() {
     const getUserData = async () => {
         try {
             const response = await fetch(`/api/firebase/getUser?id=${user.uid}`, {
-              method: "POST", 
-              headers: {
-                "Content-Type": "application/json",
-              },
+                method: "POST", 
+                headers: {
+                    "Content-Type": "application/json",
+                },
             })
             const data = await response.json()
             setUserData(data.data)

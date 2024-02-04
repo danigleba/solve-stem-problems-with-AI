@@ -18,7 +18,7 @@ export default async function handler(req, res) {
             solutions: []
         })
     }
-    res.status(201).json({ succes: true })
+    res.status(201).json({ newUser: newUser })
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error" })
   }
