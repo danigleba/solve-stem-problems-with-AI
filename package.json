@@ -9,7 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "firebase": "^10.7.2",
+    "@stripe/react-stripe-js": "^1.16.5",
+    "@stripe/stripe-js": "^1.27.0",
+    "firebase": "^10.8.0",
     "next": "14.1.0",
     "openai": "^4.26.0",
     "react": "^18.2.0",
@@ -20,6 +22,7 @@
     "rehype-katex": "^7.0.0",
     "rehype-math": "^0.2.0",
     "rehype-raw": "^7.0.0",
+    "stripe": "^14.14.0",
     "uuid": "^9.0.1"
   },
   "devDependencies": {

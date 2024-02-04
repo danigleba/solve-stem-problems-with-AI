@@ -7,7 +7,6 @@ import App from "@/utils/firebase"
 import { useRouter } from "next/router"
 import Header from "@/components/Header"
 import SideMenu from "@/components/SideMenu"
-import PricingModal from "@/components/PricingModal"
 import LoadingAnimation from "@/components/LoadingAnimation"
 
 const inter = Inter({ subsets: ["latin"] })
@@ -23,7 +22,7 @@ export default function Platform() {
     const [textProblem, setTextProblem] = useState("")
     const [imagesProblem, setImagesProblem] = useState([])
     const [isModalOpen, setIsModalOpen] = useState(false)
-
+    
     const getUserData = async () => {
         try {
             const response = await fetch(`/api/firebase/getUser?id=${user.uid}`, {
@@ -110,7 +109,6 @@ export default function Platform() {
         router.push(`/solutions/${solutionId}`)
     }
 
-
     useEffect(() => {
         onAuthStateChanged(auth, (user) => {
             if (user) {
@@ -125,6 +123,8 @@ export default function Platform() {
     useEffect(() => {
         if (user) getUserData()
     }, [user])
+
+    
 
     useEffect(() => {
         setErrorMessage("")
@@ -194,13 +194,6 @@ export default function Platform() {
                             </div>
                         </div>
                     )}
-                    {/*Pricing modal*/}
-                    <div className={`${isModalOpen == true ? "" : "hidden"} w-screen flex items-center justify-center fixed`}>
-                        <div onClick={() => setIsModalOpen(false)} className="flex items-center justify-center bg-[#171717] w-full h-full opacity-30 fixed"></div>
-                        <div className="z-20 flex items-center justify-center text-[#171717] w-max h-max absolute">
-                            <PricingModal />
-                        </div>
-                    </div>
                 </div>  
             </main>
         </>

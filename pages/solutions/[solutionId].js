@@ -38,7 +38,7 @@ export default function Platform() {
 
     const getSolution = async () => {
         const solutions = userData.solutions
-        const solution = solutions.find((solution) => solution.id === solutionId)
+        const solution = await solutions.find((solution) => solution.id === solutionId)
         setSolution(solution)
     }
 
@@ -103,7 +103,7 @@ export default function Platform() {
                             </div>
                         ))}
                         <h2 className="pt-12">Solution</h2>
-                        <MarkdownRenderer source={solution?.solution}></MarkdownRenderer>
+                        <MarkdownRenderer source={solution?.solution.replace(/\*\*(.*?)\*\*/g, '\n\n**$1**')}></MarkdownRenderer>
                     </div>
                 </div>
             </main>

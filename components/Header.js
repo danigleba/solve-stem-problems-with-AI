@@ -1,19 +1,36 @@
 import { useRouter } from "next/router"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
-import PricingModal from "./PricingModal"
-import SideMenu from "@/components/SideMenu"
 import { PiCrownSimpleFill } from "react-icons/pi"
 import { FaPlus } from "react-icons/fa6"
 import { RxHamburgerMenu } from "react-icons/rx"
 import { IoClose } from "react-icons/io5"
+import { loadStripe } from "@stripe/stripe-js"
+
+
+const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLIC_KEY_TEST)
 
 export default function Header({ user, userData }) {
   const router = useRouter()
   const { solutionId } = router.query
-  const [isModalOpen, setIsModalOpen] = useState(false)
   const [isHamburgerOpen, setIsHamburgerOpen] = useState(false)
+
+
+
+/*const createPaymentIntent = async () => {
+    const stripe = await stripePromise
+    const url = "/api/stripe/createPaymentIntent"
+    const response = await fetch(url, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            }
+        })
+    const data = await response.json()
+    setClientSecret(data.clientSecret)
+    setState("Pay")
+}*/
   return (
     <>
       <header>
@@ -28,10 +45,12 @@ export default function Header({ user, userData }) {
           <button onClick={() => router.push("/platform")} className="new-problem-btn my-0 py-2 md:hidden">New <FaPlus /></button>
         </div>
         <div className="flex items-center gap-6 font-medium">
-          <div onClick={() => setIsModalOpen(true)} className="flex items-center gap-6 cursor-pointer">
-            <PiCrownSimpleFill size={23} className="text-yellow-400 cursor-pointer"/>
-            <div className="bg-[#f4f4f4] border border-[#dddddd] px-4 py-1 rounded-md text-sm hidden md:block">{userData?.credit} solutions left</div>
-          </div>
+          {userData?.premium == false && (
+            <div onClick={() => router.push("/go-premium")} className="flex items-center gap-6 cursor-pointer">
+              <PiCrownSimpleFill size={23} className="text-yellow-400 cursor-pointer"/>
+              <div className="bg-[#f4f4f4] border border-[#dddddd] px-4 py-1 rounded-md text-sm hidden md:block">{userData?.credit} solutions left</div>
+            </div>
+          )}
           <p className="hidden md:block">{user?.displayName}</p>
           <div className="w-10 aspect-square bg-[#dddddd] rounded-full overflow-hidden">
             <Image
@@ -43,20 +62,13 @@ export default function Header({ user, userData }) {
           </div>
         </div>
       </header>
-      {/*Pricing modal*/}
-      <div className={`${isModalOpen == true ? "" : "hidden"} w-screen h-screen flex items-center justify-center fixed`}>
-        <div onClick={() => setIsModalOpen(false)} className="z-20 flex items-center justify-center bg-[#171717] w-full h-full opacity-30 fixed"></div>
-        <div className="z-20 flex items-center justify-center text-[#171717] w-max h-max absolute md:ml-64 md:mt-20">
-          <PricingModal />
-        </div>
-      </div>
       {/*Hamburger menu*/}
       <div className={`${isHamburgerOpen ? "" : "hidden"} fixed h-screen w-screen z-50`}>
         <div className="h-full w-2/3 border-r border-[#dddddd] bg-[#fafafa] pt-5 pl-7 space-y-6">
           <div onClick={() => setIsHamburgerOpen(!isHamburgerOpen)}>
             <IoClose size={28} strokeWidth={0.5}/>
           </div>
-          {/*Side menu*/}
+          {/*Side menu in mobile*/}
           <div className=" mr-7">
                     <h2 className="text-base font-bold mb-6">Solved problems</h2>
                     {userData?.solutions.length <= 0 && (
