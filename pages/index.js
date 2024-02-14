@@ -76,7 +76,7 @@ export default function Index() {
         {/* Page Title */}
         <title>Mileto | Snap your STEM problem & get a detailed solution.</title>
       </Head>
-      <main className={`${inter.className} main`}>
+      <main className={`${inter.className} main px-8`}>
         <div className="flex flex-col items-start justify-start w-full md:w-2/6 text-left">
           <h2 className="font-semibold text-2xl text-[#171717] pb-3">Mileto</h2>
           <div className="space-y-2 font-semibold text-[#737373]">
